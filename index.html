@@ -1,63 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-  <title>Sounds</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8">
+    <title>Sounds</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
-<!-- Need 8 boxes of Alphabet with keyboard key -->
-<div class=keys>
-  <!-- Each div contain key value of letter (A = 65) Source: http://keycode.info/ " class name, <kbd> and <span> name of related sound -->
-  <div data-key ="66" class="key">
-    <kbd>B</kbd>
-    <span class="sound">Bell</span>
-  </div>
+    <!-- Need 8 boxes of Alphabet with keyboard key -->
+    <div class=keys>
+        <!-- Each div contain key value of letter (A = 65) Source: http://keycode.info/ " class name, <kbd> and <span> name of related sound -->
+        <div data-key="66" class="key">
+            <kbd>B</kbd>
+            <span class="sound">Bell</span>
+        </div>
+        <div data-key="67" class="key">
+            <kbd>C</kbd>
+            <span class="sound">Clap</span>
+        </div>
+        <div data-key="72" class="key">
+            <kbd>H</kbd>
+            <span class="sound">Hats</span>
+        </div>
+        <div data-key="75" class="key">
+            <kbd>K</kbd>
+            <span class="sound">Kick</span>
+        </div>
+        <div data-key="83" class="key">
+            <kbd>S</kbd>
+            <span class="sound">Snares</span>
+        </div>
+        <div data-key="68" class="key">
+            <kbd>D</kbd>
+            <span class="sound">Drum</span>
+        </div>
+        <div data-key="84" class="key">
+            <kbd>T</kbd>
+            <span class="sound">Tabala</span>
+        </div>
+        <div data-key="87" class="key">
+            <kbd>W</kbd>
+            <span class="sound">Wave</span>
+        </div>
+        <!-- relating audio to key -->
+        <audio data-key="66" src="sounds/bell.mp3"></audio>
+        <audio data-key="67" src="sounds/clap.mp3"></audio>
+        <audio data-key="72" src="sounds/hats.mp3"></audio>
+        <audio data-key="75" src="sounds/kick.mp3"></audio>
+        <audio data-key="83" src="sounds/snares.mp3"></audio>
+        <audio data-key="68" src="sounds/steeldrum.mp3"></audio>
+        <audio data-key="84" src="sounds/tabala.mp3"></audio>
+        <audio data-key="87" src="sounds/wavedrum.mp3"></audio>
+    </div>
+    <script>
+    function removeTransition(e) {
+      // skip if it is not a transform
+        if (e.propertyName !== 'transform') return;
+        e.target.classList.remove('playing');
+    }
 
-  <div data-key ="67" class="key">
-    <kbd>C</kbd>
-    <span class="sound">Clap</span>
-  </div>
-
-  <div data-key ="72" class="key">
-    <kbd>H</kbd>
-    <span class="sound">Hats</span>
-  </div>
-
-  <div data-key ="75" class="key">
-    <kbd>K</kbd>
-    <span class="sound">Kick</span>
-  </div>
-
-  <div data-key ="83" class="key">
-    <kbd>S</kbd>
-    <span class="sound">Snares</span>
-  </div>
-
-  <div data-key ="68" class="key">
-    <kbd>D</kbd>
-    <span class="sound">Drum</span>
-  </div>
-
-  <div data-key ="84" class="key">
-    <kbd>T</kbd>
-    <span class="sound">Tabala</span>
-  </div>
-  
-  <div data-key ="87" class="key">
-    <kbd>W</kbd>
-    <span class="sound">Wave</span>
-  </div>
-<!-- relating audio to key -->
-<audio data-key="66" src="sounds/bell.mp3"></audio>
-<audio data-key="67" src="sounds/clap.mp3"></audio>
-<audio data-key="72" src="sounds/hats.mp3"></audio>
-<audio data-key="75" src="sounds/kick.mp3"></audio>
-<audio data-key="83" src="sounds/snares.mp3"></audio>
-<audio data-key="68" src="sounds/steeldrum.mp3"></audio>
-<audio data-key="84" src="sounds/tabala.mp3"></audio>
-<audio data-key="87" src="sounds/wavedrum.mp3"></audio>
-
-</div>
+    function playSound(e) {
+      // selecting keyCode for keyboard key which is saved as data-key in audio attribute
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        // css key animation
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        // stop the function running all togather 
+        if (!audio) return;
+        // adding css class for the animation
+        key.classList.add('playing');
+        // rewind audio. when press same key multiple time
+        audio.currentTime = 0; 
+        // playing audio
+        audio.play();
+    }
+    const keys = Array.from(document.querySelectorAll('.key'));
+    // to end the transition
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    // listening a keydown event ( keydown: keyboard key press)
+    window.addEventListener('keydown', playSound);
+    </script>
 </body>
+
 </html>
